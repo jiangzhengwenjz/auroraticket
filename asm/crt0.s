@@ -11,39 +11,45 @@ __start:
 sub_08000000: @ 0x08000000
 	b _080000D0
 _08000004:
-	.byte 0x24, 0xFF, 0xAE, 0x51, 0x69, 0x9A, 0xA2, 0x21, 0x3D, 0x84, 0x82, 0x0A
-	.byte 0x84, 0xE4, 0x09, 0xAD, 0x11, 0x24, 0x8B, 0x98, 0xC0, 0x81, 0x7F, 0x21, 0xA3, 0x52, 0xBE, 0x19
-	.byte 0x93, 0x09, 0xCE, 0x20, 0x10, 0x46, 0x4A, 0x4A, 0xF8, 0x27, 0x31, 0xEC, 0x58, 0xC7, 0xE8, 0x33
-	.byte 0x82, 0xE3, 0xCE, 0xBF, 0x85, 0xF4, 0xDF, 0x94, 0xCE, 0x4B, 0x09, 0xC1, 0x94, 0x56, 0x8A, 0xC0
-	.byte 0x13, 0x72, 0xA7, 0xFC, 0x9F, 0x84, 0x4D, 0x73, 0xA3, 0xCA, 0x9A, 0x61, 0x58, 0x97, 0xA3, 0x27
-	.byte 0xFC, 0x03, 0x98, 0x76, 0x23, 0x1D, 0xC7, 0x61, 0x03, 0x04, 0xAE, 0x56, 0xBF, 0x38, 0x84, 0x00
-	.byte 0x40, 0xA7, 0x0E, 0xFD, 0xFF, 0x52, 0xFE, 0x03, 0x6F, 0x95, 0x30, 0xF1, 0x97, 0xFB, 0xC0, 0x85
-	.byte 0x60, 0xD6, 0x80, 0x25, 0xA9, 0x63, 0xBE, 0x03, 0x01, 0x4E, 0x38, 0xE2, 0xF9, 0xA2, 0x34, 0xFF
-	.byte 0xBB, 0x3E, 0x03, 0x44, 0x78, 0x00, 0x90, 0xCB, 0x88, 0x11, 0x3A, 0x94, 0x65, 0xC0, 0x7C, 0x63
-	.byte 0x87, 0xF0, 0x3C, 0xAF, 0xD6, 0x25, 0xE4, 0x8B, 0x38, 0x0A, 0xAC, 0x72, 0x21, 0xD4, 0xF8, 0x07
-	.byte 0x41, 0x55, 0x52, 0x4F, 0x52, 0x41, 0x54, 0x49, 0x43, 0x4B, 0x45, 0x54, 0x4A, 0x50, 0x41, 0x4A
-	.byte 0x30, 0x31, 0x96, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3D, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+
+	.include "asm/rom_header.inc"
+
+@ 80000C0
+	.word 0
+
+	.global GPIOPortData
+GPIOPortData: @ 80000C4
+	.hword 0
+
+	.global GPIOPortDirection
+GPIOPortDirection: @ 80000C6
+	.hword 0
+
+	.global GPIOPortReadEnable
+GPIOPortReadEnable: @ 80000C8
+	.hword 0
+
+	.space 6
 _080000D0:
-	mov r0, #0x12
-	msr cpsr_fc, r0
-	ldr sp, _08000108 @ =gUnk_03007FA0
-	mov r0, #0x1f
-	msr cpsr_fc, r0
-	ldr sp, _08000104 @ =gUnk_03007C00
-	ldr r1, _08000248 @ =gUnk_03007FFC
-	add r0, pc, #0x18 @ =sub_0800010C
+	mov r0, #PSR_IRQ_MODE
+	msr cpsr_cf, r0
+	ldr sp, _08000108
+	mov r0, #PSR_SYS_MODE
+	msr cpsr_cf, r0
+	ldr sp, _08000104
+	ldr r1, _08000248 @ =INTR_VECTOR
+	add r0, pc, #0x18 @ =IntrMain
 	str r0, [r1]
-	ldr r1, _0800024C @ =sub_08000F5C
+	ldr r1, _0800024C @ =AgbMain
 	mov lr, pc
 	bx r1
 _08000100:
 	b _080000D0
-_08000104: .4byte gUnk_03007C00
-_08000108: .4byte gUnk_03007FA0
+_08000104: .4byte IWRAM_END - 0x400
+_08000108: .4byte IWRAM_END - 0x60
 
-	arm_func_start sub_0800010C
-sub_0800010C: @ 0x0800010C
+	arm_func_start IntrMain
+IntrMain: @ 0x0800010C
 	mov r3, #0x4000000
 	add r3, r3, #0x200
 	ldr ip, [r3]
@@ -53,64 +59,64 @@ sub_0800010C: @ 0x0800010C
 	strh r0, [r3, #8]
 	and r1, ip, ip, lsr #16
 	mov r2, #0
-	ands r0, r1, #0x80
+	ands r0, r1, #INTR_FLAG_SERIAL
 	bne _080001D4
 	add r2, r2, #4
-	ands r0, r1, #1
+	ands r0, r1, #INTR_FLAG_VBLANK
 	bne _080001D4
 	add r2, r2, #4
-	ands r0, r1, #2
+	ands r0, r1, #INTR_FLAG_HBLANK
 	bne _080001D4
 	add r2, r2, #4
-	ands r0, r1, #4
+	ands r0, r1, #INTR_FLAG_VCOUNT
 	bne _080001D4
 	add r2, r2, #4
-	ands r0, r1, #8
+	ands r0, r1, #INTR_FLAG_TIMER0
 	bne _080001D4
 	add r2, r2, #4
-	ands r0, r1, #0x10
+	ands r0, r1, #INTR_FLAG_TIMER1
 	bne _080001D4
 	add r2, r2, #4
-	ands r0, r1, #0x20
+	ands r0, r1, #INTR_FLAG_TIMER2
 	bne _080001D4
 	add r2, r2, #4
-	ands r0, r1, #0x40
+	ands r0, r1, #INTR_FLAG_TIMER3
 	bne _080001D4
 	add r2, r2, #4
-	ands r0, r1, #0x100
+	ands r0, r1, #INTR_FLAG_DMA0
 	bne _080001D4
 	add r2, r2, #4
-	ands r0, r1, #0x200
+	ands r0, r1, #INTR_FLAG_DMA1
 	bne _080001D4
 	add r2, r2, #4
-	ands r0, r1, #0x400
+	ands r0, r1, #INTR_FLAG_DMA2
 	bne _080001D4
 	add r2, r2, #4
-	ands r0, r1, #0x800
+	ands r0, r1, #INTR_FLAG_DMA3
 	bne _080001D4
 	add r2, r2, #4
-	ands r0, r1, #0x1000
+	ands r0, r1, #INTR_FLAG_KEYPAD
 	bne _080001D4
 	add r2, r2, #4
-	ands r0, r1, #0x2000
+	ands r0, r1, #INTR_FLAG_GAMEPAK
 _080001D0:
 	bne _080001D0
 _080001D4:
 	strh r0, [r3, #2]
-	ldr r0, _08000250 @ =gUnk_03002500
+	ldr r0, _08000250 @ =gSTWIStatus
 	ldr r0, [r0]
 	ldrb r0, [r0, #0xa]
-	mov r1, #8
+	mov r1, #INTR_FLAG_TIMER0
 	lsl r0, r1, r0
-	orr r0, r0, #0x2000
-	orr r1, r0, #0x80
+	orr r0, r0, #INTR_FLAG_GAMEPAK
+	orr r1, r0, #INTR_FLAG_SERIAL
 	and r1, r1, ip
 	strh r1, [r3]
-	mrs r3, apsr
-	bic r3, r3, #0xdf
-	orr r3, r3, #0x1f
-	msr cpsr_fc, r3
-	ldr r1, _08000254 @ =gUnk_03000014
+	mrs r3, cpsr
+	bic r3, r3, #PSR_I_BIT | PSR_F_BIT | PSR_MODE_MASK
+	orr r3, r3, #PSR_SYS_MODE
+	msr cpsr_cf, r3
+	ldr r1, _08000254 @ =gIntrTable
 	add r1, r1, r2
 	ldr r0, [r1]
 	stmdb sp!, {lr}
@@ -119,15 +125,15 @@ _080001D4:
 _08000224:
 	ldm sp!, {lr}
 	mrs r3, apsr
-	bic r3, r3, #0xdf
-	orr r3, r3, #0x92
-	msr cpsr_fc, r3
+	bic r3, r3, #PSR_I_BIT | PSR_F_BIT | PSR_MODE_MASK
+	orr r3, r3, #PSR_I_BIT | PSR_IRQ_MODE
+	msr cpsr_cf, r3
 	pop {r0, r3, ip, lr}
 	strh ip, [r3]
-	msr spsr_fc, r0
+	msr spsr_cf, r0
 	bx lr
 	.align 2, 0
-_08000248: .4byte gUnk_03007FFC
-_0800024C: .4byte sub_08000F5C
-_08000250: .4byte gUnk_03002500
-_08000254: .4byte gUnk_03000014
+_08000248: .4byte INTR_VECTOR
+_0800024C: .4byte AgbMain
+_08000250: .4byte gSTWIStatus
+_08000254: .4byte gIntrTable

@@ -453,77 +453,20 @@ gUnk_0808E2C0:: @ 0808E2C0
 gUnk_0808E2EC:: @ 0808E2EC
 	.incbin "baserom.gba", 0x08E2EC, 0xc
 
-gUnk_0808E2F8:: @ 0808E2F8
-	.incbin "baserom.gba", 0x08E2F8, 0xc0
+	.section .rodata.808E310
+	.align 2
 
-gUnk_0808E3B8:: @ 0808E3B8
-	.incbin "baserom.gba", 0x08E3B8, 0x10
+gUnk_0808E310:: @ 0808E310
+	.incbin "baserom.gba", 0x08E310, 0xa8
 
-gUnk_0808E3C8:: @ 0808E3C8
-	.incbin "baserom.gba", 0x08E3C8, 0x10
-
-gUnk_0808E3D8:: @ 0808E3D8
-	.incbin "baserom.gba", 0x08E3D8, 0x4
-
-gUnk_0808E3DC:: @ 0808E3DC
-	.incbin "baserom.gba", 0x08E3DC, 0x4
-
-gUnk_0808E3E0:: @ 0808E3E0
-	.incbin "baserom.gba", 0x08E3E0, 0x14
-
-gUnk_0808E3F4:: @ 0808E3F4
-	.incbin "baserom.gba", 0x08E3F4, 0x8
-
-gUnk_0808E3FC:: @ 0808E3FC
-	.incbin "baserom.gba", 0x08E3FC, 0x14
-
-gUnk_0808E410:: @ 0808E410
-	.incbin "baserom.gba", 0x08E410, 0x1c
-
-gUnk_0808E42C:: @ 0808E42C
-	.incbin "baserom.gba", 0x08E42C, 0x4
-
-gUnk_0808E430:: @ 0808E430
-	.incbin "baserom.gba", 0x08E430, 0x4
-
-gUnk_0808E434:: @ 0808E434
-	.incbin "baserom.gba", 0x08E434, 0xc
-
-gUnk_0808E440:: @ 0808E440
-	.incbin "baserom.gba", 0x08E440, 0x4
-
-gUnk_0808E444:: @ 0808E444
-	.incbin "baserom.gba", 0x08E444, 0x4
+	.section .rodata.808E448
+	.align 2
 
 gUnk_0808E448:: @ 0808E448
 	.incbin "baserom.gba", 0x08E448, 0x4
 
-gUnk_0808E44C:: @ 0808E44C
-	.incbin "baserom.gba", 0x08E44C, 0x30
-
-gUnk_0808E47C:: @ 0808E47C
-	.incbin "baserom.gba", 0x08E47C, 0x4
-
-gUnk_0808E480:: @ 0808E480
-	.incbin "baserom.gba", 0x08E480, 0x4
-
-gUnk_0808E484:: @ 0808E484
-	.incbin "baserom.gba", 0x08E484, 0x4
-
-gUnk_0808E488:: @ 0808E488
-	.incbin "baserom.gba", 0x08E488, 0xc
-
-gUnk_0808E494:: @ 0808E494
-	.incbin "baserom.gba", 0x08E494, 0xc8
-
-gUnk_0808E55C:: @ 0808E55C
-	.incbin "baserom.gba", 0x08E55C, 0x50
-
-gUnk_0808E5AC:: @ 0808E5AC
-	.incbin "baserom.gba", 0x08E5AC, 0x4
-
-gUnk_0808E5B0:: @ 0808E5B0
-	.incbin "baserom.gba", 0x08E5B0, 0x24
+	.section .rodata.808E5D4
+	.align 2
 
 gUnk_0808E5D4:: @ 0808E5D4
 	.incbin "baserom.gba", 0x08E5D4, 0x202c
