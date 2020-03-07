@@ -453,11 +453,11 @@ gUnk_0808E2C0:: @ 0808E2C0
 gUnk_0808E2EC:: @ 0808E2EC
 	.incbin "baserom.gba", 0x08E2EC, 0xc
 
-	.section .rodata.808E310
+	.section .rodata.808E31C
 	.align 2
 
-gUnk_0808E310:: @ 0808E310
-	.incbin "baserom.gba", 0x08E310, 0xa8
+gUnk_0808E348:: @ 0808E348
+	.incbin "baserom.gba", 0x08E348, 0x70
 
 	.section .rodata.808E448
 	.align 2

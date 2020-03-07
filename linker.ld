@@ -112,8 +112,9 @@ SECTIONS {
         . = 0x000023F8; gUnk_030023F8 = .;
         . = 0x00002400; gUnk_03002400 = .;
         . = 0x00002404; gUnk_03002404 = .;
-        . = 0x00002408; src/librfu_sio32id.o(.bss);
-        . = 0x00002416; sLocked = .;
+        . = 0x00002408;
+        . = ALIGN(4); src/librfu_sio32id.o(.bss);
+        . = ALIGN(4); src/siirtc.o(.bss);
         . = 0x00002418; sTimerNum = .;
         . = 0x0000241A; sTimerCount = .;
         . = 0x0000241C; sTimerReg = .;
@@ -148,7 +149,7 @@ SECTIONS {
         src/librfu_intr.o(.text);
         asm/librfu_rfu.o(.text);
         src/librfu_sio32id.o(.text);
-        asm/siirtc.o(.text);
+        src/siirtc.o(.text);
         asm/agb_flash.o(.text);
         asm/libagbsyscall.o(.text);
         *libgcc.a:_call_via_rX.o(.text);
@@ -201,7 +202,8 @@ SECTIONS {
         *libgcc.a:_negdi2.o(.text);
         data/data.o(.rodata);
         src/librfu_sio32id.o(.rodata);
-        data/data.o(.rodata.808E310);
+        src/siirtc.o(.rodata);
+        data/data.o(.rodata.808E31C);
         *libc.a:vfprintf.o(.rodata);
         *libc.a:dtoa.o(.rodata);
         data/data.o(.rodata.808E448);
