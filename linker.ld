@@ -115,11 +115,7 @@ SECTIONS {
         . = 0x00002408;
         . = ALIGN(4); src/librfu_sio32id.o(.bss);
         . = ALIGN(4); src/siirtc.o(.bss);
-        . = 0x00002418; sTimerNum = .;
-        . = 0x0000241A; sTimerCount = .;
-        . = 0x0000241C; sTimerReg = .;
-        . = 0x00002420; sSavedIme = .;
-        . = 0x00002428;
+        . = ALIGN(8); src/agb_flash.o(.bss);
         . = ALIGN(8); *libc.a:syscalls.o(.bss);
         . = ALIGN(8); *libgcc.a:dp-bit.o(.bss);
         . = ALIGN(8); *libgcc.a:fp-bit.o(.bss);
@@ -150,7 +146,7 @@ SECTIONS {
         asm/librfu_rfu.o(.text);
         src/librfu_sio32id.o(.text);
         src/siirtc.o(.text);
-        asm/agb_flash.o(.text);
+        src/agb_flash.o(.text);
         asm/libagbsyscall.o(.text);
         *libgcc.a:_call_via_rX.o(.text);
         *libgcc.a:_divsi3.o(.text);

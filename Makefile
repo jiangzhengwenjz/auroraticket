@@ -148,6 +148,8 @@ $(C_BUILDDIR)/librfu_intr.o: CFLAGS := -O2 -mthumb-interwork -quiet
 
 $(C_BUILDDIR)/siirtc.o: CFLAGS := -O0 -mthumb-interwork
 
+$(C_BUILDDIR)/agb_flash.o: CFLAGS := -O1 -mthumb-interwork
+
 $(C_BUILDDIR)/%.o : $(C_SUBDIR)/%.c $$(c_dep)
 	@$(CPP) $(CPPFLAGS) $< -o $(C_BUILDDIR)/$*.i
 	@$(PREPROC) $(C_BUILDDIR)/$*.i | $(CC1) $(CFLAGS) -o $(C_BUILDDIR)/$*.s
