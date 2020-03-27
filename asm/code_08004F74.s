@@ -3544,8 +3544,8 @@ nullsub_5: @ 0x08006B14
 	bx lr
 	.align 2, 0
 
-	thumb_func_start sub_08006B18
-sub_08006B18: @ 0x08006B18
+	thumb_func_start CalcCRC16WithTable
+CalcCRC16WithTable: @ 0x08006B18
 	push {r4, r5, r6, lr}
 	adds r5, r0, #0
 	adds r4, r1, #0
@@ -3553,7 +3553,7 @@ sub_08006B18: @ 0x08006B18
 	movs r3, #0
 	cmp r3, r4
 	bhs _08006B46
-	ldr r6, _08006B58 @ =gUnk_08016C9C
+	ldr r6, _08006B58 @ =gCrc16Table
 _08006B28:
 	lsrs r1, r2, #8
 	adds r0, r5, r3
@@ -3579,7 +3579,7 @@ _08006B46:
 	bx r1
 	.align 2, 0
 _08006B54: .4byte 0x00001121
-_08006B58: .4byte gUnk_08016C9C
+_08006B58: .4byte gCrc16Table
 
 	thumb_func_start sub_08006B5C
 sub_08006B5C: @ 0x08006B5C
@@ -3617,7 +3617,7 @@ _08006B7C:
 	orrs r0, r1
 	str r0, [sp, #4]
 	ldr r0, [r4, #0x1c]
-	bl sub_08006B18
+	bl CalcCRC16WithTable
 	lsls r0, r0, #0x10
 	ldr r2, _08006BC8 @ =0x0000FFFF
 	ldr r1, [sp]
@@ -3682,7 +3682,7 @@ _08006C1A:
 	beq _08006C54
 	ldr r0, [r4, #0x1c]
 	ldrh r1, [r4, #0x14]
-	bl sub_08006B18
+	bl CalcCRC16WithTable
 	lsls r0, r0, #0x10
 	lsrs r0, r0, #0x10
 	ldrh r1, [r4, #0x12]
@@ -3806,7 +3806,7 @@ _08006CF6:
 _08006D0A:
 	ldr r0, [r4, #0x18]
 	ldrh r1, [r4, #0xc]
-	bl sub_08006B18
+	bl CalcCRC16WithTable
 	lsls r0, r0, #0x10
 	lsrs r0, r0, #0x10
 	ldrh r1, [r4, #0xa]

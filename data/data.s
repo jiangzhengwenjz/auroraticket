@@ -306,7 +306,7 @@ gUnk_08016C58:: @ 08016C58
 gUnk_08016C8C:: @ 08016C8C
 	.incbin "baserom.gba", 0x016C8C, 0x10
 
-gUnk_08016C9C:: @ 08016C9C
+gCrc16Table:: @ 08016C9C
 	.incbin "baserom.gba", 0x016C9C, 0x200
 
 gUnk_08016E9C:: @ 08016E9C
