@@ -108,12 +108,9 @@ SECTIONS {
         . = 0x000023E2; gUnk_030023E2 = .;
         . = 0x000023E4; gUnk_030023E4 = .;
         . = 0x000023E8; gUnk_030023E8 = .;
-        . = 0x000023F0; gUnk_030023F0 = .;
-        . = 0x000023F8; gUnk_030023F8 = .;
-        . = 0x00002400; gUnk_03002400 = .;
-        . = 0x00002404; gUnk_03002404 = .;
-        . = 0x00002408;
-        . = ALIGN(4); src/librfu_sio32id.o(.bss);
+        . = 0x000023F0;
+        . = ALIGN(8); src/librfu_rfu.o(.bss);
+        . = ALIGN(8); src/librfu_sio32id.o(.bss);
         . = ALIGN(4); src/siirtc.o(.bss);
         . = ALIGN(8); src/agb_flash.o(.bss);
         . = ALIGN(8); *libc.a:syscalls.o(.bss);
@@ -126,12 +123,15 @@ SECTIONS {
         . = 0x00002540; gRfuLinkStatus = .;
         . = 0x00002544; gRfuStatic = .;
         . = 0x00002548; gRfuFixed = .;
+
         . = 0x0000254C; gFlashTimeoutFlag = .;
         . = 0x00002550; PollFlashStatus = .;
         . = 0x00002558; ProgramFlashSector = .;
         . = 0x0000255C; gFlash = .;
         . = 0x0000256C; gFlashMaxTime = .;
+
         . = 0x00002570; *libc.a:sbrkr.o(COMMON);
+
         . = 0x00007F00; gUnk_03007F00 = .;
         . = 0x00008000;
     } >iwram
@@ -143,7 +143,7 @@ SECTIONS {
         asm/code_08004F74.o(.text);
         src/librfu_stwi.o(.text);
         src/librfu_intr.o(.text);
-        asm/librfu_rfu.o(.text);
+        src/librfu_rfu.o(.text);
         src/librfu_sio32id.o(.text);
         src/siirtc.o(.text);
         src/agb_flash.o(.text);
@@ -197,9 +197,10 @@ SECTIONS {
         *libgcc.a:_muldi3.o(.text);
         *libgcc.a:_negdi2.o(.text);
         data/data.o(.rodata);
+        src/librfu_rfu.o(.rodata);
         src/librfu_sio32id.o(.rodata);
         src/siirtc.o(.rodata);
-        data/data.o(.rodata.808E31C);
+        data/data.o(.rodata.808E348);
         *libc.a:vfprintf.o(.rodata);
         *libc.a:dtoa.o(.rodata);
         data/data.o(.rodata.808E448);
