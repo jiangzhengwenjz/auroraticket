@@ -123,34 +123,29 @@ static void Sio32IDIntr(void)
 {
     u32 regSIODATA32;
     u16 delay;
-#ifndef NONMATCHING
-    register u32 rfuSIO32IdUnk0_times_16 asm("r1");
-    register u16 nesRfuSIO32IdUnk6 asm("r0");
-#else
     u32 rfuSIO32IdUnk0_times_16;
-    u16 nesRfuSIO32IdUnk6;
-#endif
 
     regSIODATA32 = REG_SIODATA32;
     if (sRfuSIO32Id.MS_mode != AGB_CLK_MASTER)
         REG_SIOCNT |= SIO_ENABLE;
-    rfuSIO32IdUnk0_times_16 = 16 * sRfuSIO32Id.MS_mode; // to handle side effect of inline asm
-    rfuSIO32IdUnk0_times_16 = (regSIODATA32 << rfuSIO32IdUnk0_times_16) >> 16;
+    rfuSIO32IdUnk0_times_16 = (regSIODATA32 << (16 * sRfuSIO32Id.MS_mode)) >> 16;
     regSIODATA32 = (regSIODATA32 << 16 * (1 - sRfuSIO32Id.MS_mode)) >> 16;
     if (sRfuSIO32Id.lastId == 0)
     {
-        if (rfuSIO32IdUnk0_times_16 == sRfuSIO32Id.recv_id)
+        u16 backup = rfuSIO32IdUnk0_times_16;
+        if (backup == sRfuSIO32Id.recv_id)
         {
-            if (sRfuSIO32Id.count > 3)
+            if (sRfuSIO32Id.count < 4)
             {
+                backup = (u16)~sRfuSIO32Id.send_id;
+                if (sRfuSIO32Id.recv_id == backup)
+                {
+                    if (regSIODATA32 == (u16)~sRfuSIO32Id.recv_id)
+                        ++sRfuSIO32Id.count;
+                }
+            }
+            else
                 sRfuSIO32Id.lastId = regSIODATA32;
-            }
-            else if (rfuSIO32IdUnk0_times_16 == (u16)~sRfuSIO32Id.send_id)
-            {
-                nesRfuSIO32IdUnk6 = ~sRfuSIO32Id.recv_id;
-                if (regSIODATA32 == nesRfuSIO32IdUnk6)
-                    ++sRfuSIO32Id.count;
-            }
         }
         else
         {
