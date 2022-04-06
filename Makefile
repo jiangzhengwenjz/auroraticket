@@ -2,6 +2,10 @@ include $(DEVKITARM)/base_tools
 
 COMPARE ?= 0
 
+ifeq (compare,$(MAKECMDGOALS))
+COMPARE := 1
+endif
+
 CPP := $(CC) -E
 LD := $(DEVKITARM)/bin/arm-none-eabi-ld
 
@@ -33,7 +37,7 @@ DATA_ASM_BUILDDIR = $(OBJ_DIR)/$(DATA_ASM_SUBDIR)
 ASFLAGS := -mcpu=arm7tdmi --defsym REVISION=$(REVISION) --defsym $(GAME_LANGUAGE)=1
 
 CC1             := tools/agbcc/bin/agbcc
-override CFLAGS += -mthumb-interwork -Wimplicit -Wparentheses -Werror -O2 -fhex-asm
+override CFLAGS += -mthumb-interwork -Wimplicit -Wparentheses -Werror -O2 -g -fhex-asm
 
 CPPFLAGS := -I tools/agbcc -I tools/agbcc/include -iquote include -nostdinc -undef -DREVISION=$(REVISION) -D$(GAME_LANGUAGE)
 
@@ -103,8 +107,7 @@ $(TOOLDIRS):
 	@$(MAKE) -C $@
 
 # For contributors to make sure a change didn't affect the contents of the ROM.
-compare:
-	@$(MAKE) COMPARE=1
+compare: all
 
 mostlyclean: tidy
 	find . \( -iname '*.1bpp' -o -iname '*.4bpp' -o -iname '*.8bpp' -o -iname '*.gbapal' -o -iname '*.lz' -o -iname '*.latfont' -o -iname '*.hwjpnfont' -o -iname '*.fwjpnfont' \) -exec rm {} +
@@ -139,16 +142,12 @@ else
 $(C_BUILDDIR)/%.o: c_dep = $(shell $(SCANINC) -I include $(C_SUBDIR)/$*.c)
 endif
 
-ifeq ($(DINFO),1)
-override CFLAGS += -g
-endif
-
 $(C_BUILDDIR)/librfu_intr.o: CC1 := tools/agbcc/bin/agbcc_arm
-$(C_BUILDDIR)/librfu_intr.o: CFLAGS := -O2 -mthumb-interwork -quiet
+$(C_BUILDDIR)/librfu_intr.o: CFLAGS := -O2 -mthumb-interwork -quiet -g
 
-$(C_BUILDDIR)/siirtc.o: CFLAGS := -O0 -mthumb-interwork
+$(C_BUILDDIR)/siirtc.o: CFLAGS := -O0 -mthumb-interwork -g
 
-$(C_BUILDDIR)/agb_flash.o: CFLAGS := -O1 -mthumb-interwork
+$(C_BUILDDIR)/agb_flash.o: CFLAGS := -O1 -mthumb-interwork -g
 
 $(C_BUILDDIR)/%.o : $(C_SUBDIR)/%.c $$(c_dep)
 	@$(CPP) $(CPPFLAGS) $< -o $(C_BUILDDIR)/$*.i

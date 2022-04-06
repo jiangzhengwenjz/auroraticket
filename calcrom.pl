@@ -43,7 +43,7 @@ while (my $line = <$file>)
             }
             elsif ($dir eq 'asm')
             {
-                if (!($basename =~ /(crt0|libagbsyscall|libgcnmultiboot|m4a_1)/))
+                if (!($basename =~ /(crt0|libagbsyscall)/))
                 {
                     push @pairs, [$basename, $size];
                 }
