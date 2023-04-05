@@ -37,7 +37,7 @@ DATA_ASM_BUILDDIR = $(OBJ_DIR)/$(DATA_ASM_SUBDIR)
 ASFLAGS := -mcpu=arm7tdmi --defsym REVISION=$(REVISION) --defsym $(GAME_LANGUAGE)=1
 
 CC1             := tools/agbcc/bin/agbcc
-override CFLAGS += -mthumb-interwork -Wimplicit -Wparentheses -Werror -O2 -g -fhex-asm
+override CFLAGS += -mthumb-interwork -Wimplicit -Wparentheses -Werror -O2 -g -fhex-asm -ffix-debug-line
 
 CPPFLAGS := -I tools/agbcc -I tools/agbcc/include -iquote include -nostdinc -undef -DREVISION=$(REVISION) -D$(GAME_LANGUAGE)
 
@@ -143,11 +143,12 @@ $(C_BUILDDIR)/%.o: c_dep = $(shell $(SCANINC) -I include $(C_SUBDIR)/$*.c)
 endif
 
 $(C_BUILDDIR)/librfu_intr.o: CC1 := tools/agbcc/bin/agbcc_arm
+# TODO: add -ffix-debug-line
 $(C_BUILDDIR)/librfu_intr.o: CFLAGS := -O2 -mthumb-interwork -quiet -g
 
-$(C_BUILDDIR)/siirtc.o: CFLAGS := -O0 -mthumb-interwork -g
+$(C_BUILDDIR)/siirtc.o: CFLAGS := -O0 -mthumb-interwork -g -ffix-debug-line
 
-$(C_BUILDDIR)/agb_flash.o: CFLAGS := -O1 -mthumb-interwork -g
+$(C_BUILDDIR)/agb_flash.o: CFLAGS := -O1 -mthumb-interwork -g -ffix-debug-line
 
 $(C_BUILDDIR)/%.o : $(C_SUBDIR)/%.c $$(c_dep)
 	@$(CPP) $(CPPFLAGS) $< -o $(C_BUILDDIR)/$*.i
